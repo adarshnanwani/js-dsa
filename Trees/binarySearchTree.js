@@ -67,15 +67,58 @@ class BinarySearchTree {
     }
     return false;
   }
+  BFS() {
+    const queue = [];
+    const visited = [];
+    queue.push(this.root);
+    while (queue.length > 0) {
+      const current = queue.shift();
+      visited.push(current.value);
+      if (current.left) queue.push(current.left);
+      if (current.right) queue.push(current.right);
+    }
+    return visited;
+  }
+  DFSPreOrder() {
+    const visited = [];
+    function traverse(node) {
+      visited.push(node.value);
+      if (node.left) traverse(node.left);
+      if (node.right) traverse(node.right);
+    }
+    traverse(this.root);
+    return visited;
+  }
+  DFSPostOrder() {
+    const visited = [];
+    function traverse(node) {
+      if (node.left) traverse(node.left);
+      if (node.right) traverse(node.right);
+      visited.push(node.value);
+    }
+    traverse(this.root);
+    return visited;
+  }
+  DFSInOrder() {
+    const visited = [];
+    function traverse(node) {
+      if (node.left) traverse(node.left);
+      visited.push(node.value);
+      if (node.right) traverse(node.right);
+    }
+    traverse(this.root);
+    return visited;
+  }
 }
 const bst = new BinarySearchTree();
 bst.insert(10);
-bst.insert(5);
-bst.insert(2);
-bst.insert(12);
-bst.insert(55);
-//25;
-//                 55
-//         33             67
-//     22      44
-// 10              52
+bst.insert(6);
+bst.insert(3);
+bst.insert(8);
+bst.insert(15);
+bst.insert(20);
+console.log(bst.DFSInOrder());
+
+//                   10
+//          6                15
+//      3       8                  20
