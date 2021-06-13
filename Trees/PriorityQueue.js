@@ -2,19 +2,28 @@ function swap(arr, x, y) {
   [arr[x], arr[y]] = [arr[y], arr[x]];
 }
 
-class MaxBinaryHeap {
+class Node {
+  constructor(val, priority) {
+    this.val = val;
+    this.priority = priority;
+  }
+}
+
+class PriorityQueue {
   constructor() {
     this.values = [];
   }
-  insert(val) {
-    this.values.push(val);
+  enqueue(val, priority = 1) {
+    const newNode = new Node(val, priority);
+    this.values.push(newNode);
     if (this.values.length === 0) return this.values;
+
     function bubble(arr, currentIndex) {
       const parentIndex = Math.floor((currentIndex - 1) / 2);
-      if (arr[parentIndex] < val) {
-        [arr[currentIndex], arr[parentIndex]] = [
-          arr[parentIndex],
+      if (arr[parentIndex] && arr[parentIndex].priority > priority) {
+        [arr[parentIndex], arr[currentIndex]] = [
           arr[currentIndex],
+          arr[parentIndex],
         ];
         bubble(arr, parentIndex);
       } else {
@@ -22,9 +31,10 @@ class MaxBinaryHeap {
       }
     }
     bubble(this.values, this.values.length - 1);
+
     return this.values;
   }
-  extractMax() {
+  dequeue() {
     if (this.values.length === 0) {
       return undefined;
     }
@@ -46,13 +56,16 @@ class MaxBinaryHeap {
       let swapper = null;
 
       if (leftIndex < arr.length) {
-        if (arr[leftIndex] > arr[currentIndex]) swapper = leftIndex;
+        if (arr[leftIndex].priority < arr[currentIndex].priority)
+          swapper = leftIndex;
       }
 
       if (rightIndex < arr.length) {
         if (
-          (arr[rightIndex] > arr[leftIndex] && swapper !== null) ||
-          (arr[rightIndex] > arr[currentIndex] && swapper === null)
+          (arr[rightIndex].priority < arr[leftIndex].priority &&
+            swapper !== null) ||
+          (arr[rightIndex].priority < arr[currentIndex].priority &&
+            swapper === null)
         )
           swapper = rightIndex;
       }
@@ -66,19 +79,17 @@ class MaxBinaryHeap {
   }
 }
 
-const mbh = new MaxBinaryHeap();
-console.log(mbh.insert(41));
-console.log(mbh.insert(39));
-console.log(mbh.insert(33));
-console.log(mbh.insert(18));
-console.log(mbh.insert(27));
-console.log(mbh.insert(12));
-console.log(mbh.insert(55));
-console.log(mbh.extractMax());
-console.log(mbh.extractMax());
-console.log(mbh.extractMax());
-console.log(mbh.extractMax());
-console.log(mbh.extractMax());
-console.log(mbh.extractMax());
-console.log(mbh.extractMax());
-console.log(mbh.extractMax());
+const pq = new PriorityQueue();
+console.log(pq.enqueue('Common cold', 5));
+console.log(pq.enqueue('Gunshot wound', 1));
+console.log(pq.enqueue('High fever', 4));
+console.log(pq.enqueue('Broken Arm', 2));
+console.log(pq.enqueue('Broken Leg', 2));
+console.log(pq.enqueue('Broken hand', 2));
+console.log(pq.enqueue('Concussion', 3));
+console.log(pq.dequeue());
+console.log(pq.dequeue());
+console.log(pq.dequeue());
+console.log(pq.dequeue());
+console.log(pq.dequeue());
+console.log(pq.dequeue());
